@@ -172,3 +172,4 @@ FXShield does not generate exchange rates itself. It requests rates from:
 - ExchangeRate-API Open Access (secondary): `https://open.er-api.com`
 
 When the secondary provider supplies a rate, the API response includes the required ExchangeRate-API attribution.
+
