@@ -17,50 +17,6 @@ FXShield is a resilient asynchronous currency-conversion API built with Python a
 
 The project intentionally does **not** include Terraform, Jenkins, or deployment shell scripts. The focus is backend engineering, reliability, testing, and CI.
 
-## Project structure
-
-```text
-FXShield/
-├── main.py                 # complete FastAPI application and resilience logic
-├── tests/                  # automated tests
-├── requirements.txt        # runtime dependencies
-├── requirements-dev.txt    # testing and linting dependencies
-├── Dockerfile
-├── .env.example
-└── .github/workflows/ci.yml
-```
-
-The application is intentionally kept in a single `main.py` file for a small portfolio project. In a larger production system, the configuration, provider adapters, cache, service logic, and API routes would normally be split into modules.
-
-## Architecture
-
-```text
-Client
-  |
-  v
-FXShield / FastAPI
-  |
-  +--> fresh cache? ------> return cached rate
-  |
-  v
-Frankfurter (primary)
-  |
-  +--> success -----------> cache + return
-  |
-  +--> temporary failure -> retry with backoff
-  |
-  v
-ExchangeRate-API (secondary)
-  |
-  +--> success -----------> cache + return
-  |
-  +--> failure -----------> stale cache if available
-                              |
-                              +--> otherwise HTTP 503
-```
-
-Repeated technical failures can open a provider's circuit breaker temporarily. Unsupported currency input is treated as a client error instead of a provider outage.
-
 ## Run locally
 
 Requires Python 3.12+.
